@@ -1,3 +1,6 @@
 node_modules
 package-lock.json
 js/bundle.js*
+
+api/**
+!api/**/*.go
