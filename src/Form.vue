@@ -1,0 +1,147 @@
+<script setup>
+import { ref, watch } from 'vue';
+const refFormAccount = ref();
+const refFormDeal = ref();
+const refOutputResponse = ref();
+const outputResponse = ref();
+
+const submit = async (refForm, path) => {
+  let formData = new FormData(refForm);
+  try {
+    const response = await fetch(`/api/${path}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    outputResponse.value = await response.json();
+  } catch (e) {}
+};
+
+watch([outputResponse, refOutputResponse], () => {
+  if (!(refOutputResponse.value && outputResponse.value)) return;
+  const message = outputResponse.value;
+  refOutputResponse.value.textContent = `${message}`;
+});
+</script>
+
+<template>
+  <div>
+    <div>
+      <h3>Form</h3>
+    </div>
+    <div>
+      <form
+        :ref="(el) => (refFormAccount = el)"
+        @submit.prevent="() => submit(refFormAccount)"
+      >
+        <h3 :class="$style.formTitleH3">Account Form</h3>
+        <p
+          :ref="(el) => (refOutputResponse = el)"
+          :class="
+            outputResponse == undefined
+              ? ''
+              : outputResponse.success
+              ? $style.success
+              : $style.failure
+          "
+        ></p>
+        <p>Account name</p>
+        <input
+          v-model="accountName"
+          :name="`accountName`"
+          placeholder="Account Name in Zoho CRM"
+        />
+        <p></p>
+        <p>Account website</p>
+        <input
+          v-model="accountWebsite"
+          :name="`accountWebsite`"
+          placeholder="Website in Zoho CRM"
+        />
+        <p>Account phone</p>
+        <input
+          v-model="accountPhone"
+          :name="`accountPhone`"
+          placeholder="Phone in Zoho CRM"
+        />
+        <p></p>
+        <div :class="$style.buttonContainerDiv">
+          <input :type="`submit`" :value="`Submit Account`" />
+        </div>
+      </form>
+      <form
+        :ref="(el) => (refFormDeal = el)"
+        @submit.prevent="() => submit(refFormDeal)"
+      >
+        <h3 :class="$style.formTitleH3">Account Deal</h3>
+        <p
+          :ref="(el) => (refOutputResponse = el)"
+          :class="
+            outputResponse == undefined
+              ? ''
+              : outputResponse.success
+              ? $style.success
+              : $style.failure
+          "
+        ></p>
+        <p>Deal name</p>
+        <input
+          v-model="dealName"
+          :name="`dealName`"
+          placeholder="Deal Name in Zoho CRM"
+        />
+        <p></p>
+        <p>Deal stage</p>
+        <input
+          v-model="dealStage"
+          :name="`dealStage`"
+          placeholder="Deal stage in Zoho CRM"
+        />
+        <p></p>
+        <div :class="$style.buttonContainerDiv">
+          <input :type="`submit`" :value="`Submit Deal`" />
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<style module>
+a {
+  color: blue;
+}
+input {
+  padding: 0.3rem;
+  border: 1px grey solid;
+  width: 100%;
+}
+.formContainerDiv {
+  margin-bottom: 2rem;
+}
+.formTitleH3 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.buttonContainerDiv {
+  margin: 0.3rem;
+  width: fit-content;
+}
+.success {
+  white-space: pre-line;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 2px green solid;
+  color: darkslategrey;
+  font-size: 1.5rem;
+  border-radius: 1rem;
+}
+.failure {
+  white-space: pre-line;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 3px red solid;
+  border-radius: 1rem;
+  color: darkred;
+  font-size: 1.3rem;
+}
+</style>
