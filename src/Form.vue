@@ -32,7 +32,7 @@ watch([outputResponse, refOutputResponse], () => {
     <div>
       <form
         :ref="(el) => (refFormAccount = el)"
-        @submit.prevent="() => submit(refFormAccount)"
+        @submit.prevent="() => submit(refFormAccount, 'account')"
       >
         <h3 :class="$style.formTitleH3">Account Form</h3>
         <p
@@ -46,24 +46,12 @@ watch([outputResponse, refOutputResponse], () => {
           "
         ></p>
         <p>Account name</p>
-        <input
-          v-model="accountName"
-          :name="`accountName`"
-          placeholder="Account Name in Zoho CRM"
-        />
+        <input :name="`accountName`" placeholder="Account Name in Zoho CRM" />
         <p></p>
         <p>Account website</p>
-        <input
-          v-model="accountWebsite"
-          :name="`accountWebsite`"
-          placeholder="Website in Zoho CRM"
-        />
+        <input :name="`accountWebsite`" placeholder="Website in Zoho CRM" />
         <p>Account phone</p>
-        <input
-          v-model="accountPhone"
-          :name="`accountPhone`"
-          placeholder="Phone in Zoho CRM"
-        />
+        <input :name="`accountPhone`" placeholder="Phone in Zoho CRM" />
         <p></p>
         <div :class="$style.buttonContainerDiv">
           <input :type="`submit`" :value="`Submit Account`" />
@@ -71,9 +59,9 @@ watch([outputResponse, refOutputResponse], () => {
       </form>
       <form
         :ref="(el) => (refFormDeal = el)"
-        @submit.prevent="() => submit(refFormDeal)"
+        @submit.prevent="() => submit(refFormDeal, 'deal')"
       >
-        <h3 :class="$style.formTitleH3">Account Deal</h3>
+        <h3 :class="$style.formTitleH3">Deal Form</h3>
         <p
           :ref="(el) => (refOutputResponse = el)"
           :class="
@@ -85,18 +73,10 @@ watch([outputResponse, refOutputResponse], () => {
           "
         ></p>
         <p>Deal name</p>
-        <input
-          v-model="dealName"
-          :name="`dealName`"
-          placeholder="Deal Name in Zoho CRM"
-        />
+        <input :name="`dealName`" placeholder="Deal Name in Zoho CRM" />
         <p></p>
         <p>Deal stage</p>
-        <input
-          v-model="dealStage"
-          :name="`dealStage`"
-          placeholder="Deal stage in Zoho CRM"
-        />
+        <input :name="`dealStage`" placeholder="Deal stage in Zoho CRM" />
         <p></p>
         <div :class="$style.buttonContainerDiv">
           <input :type="`submit`" :value="`Submit Deal`" />
