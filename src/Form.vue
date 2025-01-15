@@ -19,7 +19,7 @@ const submit = async (refForm, path) => {
 
 watch([outputResponse, refOutputResponse], () => {
   if (!(refOutputResponse.value && outputResponse.value)) return;
-  const message = outputResponse.value;
+  const message = JSON.stringify(outputResponse.value);
   refOutputResponse.value.textContent = `${message}`;
 });
 </script>
