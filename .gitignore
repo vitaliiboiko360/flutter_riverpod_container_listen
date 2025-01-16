@@ -4,3 +4,5 @@ js/bundle.js*
 
 api/**
 !api/**/*.go
+
+*.api.config.json
