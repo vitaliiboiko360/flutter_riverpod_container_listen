@@ -2,8 +2,10 @@
 import { ref, watch } from 'vue';
 const refFormAccount = ref();
 const refFormDeal = ref();
-const refOutputResponse = ref();
-const outputResponse = ref();
+const refOutputResponseAccount = ref();
+const refOutputResponseDeal = ref();
+const outputResponseAccount = ref();
+const outputResponseDeal = ref();
 
 const submit = async (refForm, path) => {
   let formData = new FormData(refForm);
@@ -13,14 +15,25 @@ const submit = async (refForm, path) => {
       body: formData,
     });
 
-    outputResponse.value = await response.json();
+    if (path == 'accounts') outputResponseAccount.value = await response.json();
+    if (path == 'deals') outputResponseDeal.value = await response.json();
   } catch (e) {}
 };
 
-watch([outputResponse, refOutputResponse], () => {
-  if (!(refOutputResponse.value && outputResponse.value)) return;
-  const message = JSON.stringify(outputResponse.value);
-  refOutputResponse.value.textContent = `${message}`;
+watch([outputResponseAccount, refOutputResponseAccount], () => {
+  if (!(refOutputResponseAccount.value && outputResponseAccount.value)) return;
+
+  const message = JSON.stringify(outputResponseAccount.value);
+
+  refOutputResponseAccount.value.textContent = `${message}`;
+});
+
+watch([outputResponseDeal, refOutputResponseDeal], () => {
+  if (!(refOutputResponseDeal.value && outputResponseDeal.value)) return;
+
+  const message = JSON.stringify(outputResponseDeal.value);
+
+  refOutputResponseDeal.value.textContent = `${message}`;
 });
 </script>
 
@@ -36,11 +49,11 @@ watch([outputResponse, refOutputResponse], () => {
       >
         <h3 :class="$style.formTitleH3">Account Form</h3>
         <p
-          :ref="(el) => (refOutputResponse = el)"
+          :ref="(el) => (refOutputResponseAccount = el)"
           :class="
-            outputResponse == undefined
+            outputResponseAccount == undefined
               ? ''
-              : outputResponse.success
+              : outputResponseAccount.success
               ? $style.success
               : $style.failure
           "
@@ -63,11 +76,11 @@ watch([outputResponse, refOutputResponse], () => {
       >
         <h3 :class="$style.formTitleH3">Deal Form</h3>
         <p
-          :ref="(el) => (refOutputResponse = el)"
+          :ref="(el) => (refOutputResponseDeal = el)"
           :class="
-            outputResponse == undefined
+            outputResponseDeal == undefined
               ? ''
-              : outputResponse.success
+              : outputResponseDeal.success
               ? $style.success
               : $style.failure
           "
