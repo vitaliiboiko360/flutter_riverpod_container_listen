@@ -1,6 +1,7 @@
+import * as os from 'os';
 import { readFileSync } from 'fs';
 import { CreateRecords } from './CreateRecords';
-import { STATUS_CODES } from 'http';
+import { StatusCodes } from 'http-status-codes';
 
 const CONFIG_FILE = './zoho.api.config.json';
 const PORT = 3004;
@@ -15,56 +16,51 @@ let config = JSON.parse(readFileSync(CONFIG_FILE, 'utf8'));
 
 const leadsModuleAPIName = 'leads';
 // await CreateRecords.createRecords(leadsModuleAPIName);
+const L = console.log;
 
-import * as express from 'express';
-const app = express.application;
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const bodyParser = require('body-parser');
+const formData = require('express-form-data');
+const express = require('express');
+const app = express();
+
+const options = {
+  uploadDir: os.tmpdir(),
+  autoClean: true,
+};
+app.use(bodyParser.json());
+// parse data with connect-multiparty.
+app.use(formData.parse(options));
+// delete from the request all empty files (size == 0)
+app.use(formData.format());
+// change the file objects to fs.ReadStream
+app.use(formData.stream());
+// union the body and the files
+app.use(formData.union());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/accounts', (reg, res) => {
-  res
-    .status(STATUS_CODES.OK)
-    .json({ success: 'true', backEndApiRelay: 'true' });
+  res.status(StatusCodes.OK).json({ success: 'true', backEndApiRelay: 'true' });
 });
 
 app.post('/accounts', (req, res) => {
-  res
-    .status(STATUS_CODES.OK)
-    .json({ success: 'true', backEndApiRelay: 'true' });
+  L('accounts');
+  L(req.body);
+
+  res.status(StatusCodes.OK).json({
+    success: 'true',
+    website: `${req.body.website}`,
+    formFields: {
+      name: req.body.name,
+      phone: req.body.phone,
+    },
+  });
 });
 
 app.post('/deals', (req, res) => {
-  res
-    .status(STATUS_CODES.OK)
-    .json({ success: 'true', backEndApiRelay: 'true' });
+  L(req.body);
+  res.status(StatusCodes.OK).json({ success: 'true', backEndApiRelay: 'true' });
 });
 
-import * as ipc from './ipc.js';
-
-const L = console.log;
-
-const ipcEventListener = ipc.getEvents();
-
-ipcEventListener.on('connected', function (m) {
-  L('Client has connected');
-});
-
-ipcEventListener.on('data', function (m) {
-  L(m.type);
-  L(m.data.toString());
-});
-
-ipcEventListener.on('error', function (data) {
-  L(data.toString());
-});
-
-ipcEventListener.on('close', function (data) {
-  L(data.toString());
-});
-
-ipc.connect('zohoCrm', true);
-
-let counter = 0;
-// setInterval(() => {
-//   ipc.write(1, `# ${counter++} FROM NODEJS AFTER 10sec`);
-// }, 10000);
-
-app.listen(PORT);
+app.listen(PORT, '0.0.0.0');
