@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const ADDRESS = "0.0.0.0:3003"
+const HOST_ADDR = "0.0.0.0:3003"
 
 func main() {
 	r := gin.Default()
@@ -40,5 +40,7 @@ func main() {
 		})
 	})
 
-	r.Run(ADDRESS) // listen and serve on 0.0.0.0:3003
+	go startIpcServer()
+
+	r.Run(HOST_ADDR) // listen and serve on 0.0.0.0:3003
 }
