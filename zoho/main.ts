@@ -20,15 +20,46 @@ import * as express from 'express';
 const app = express.application;
 
 app.get('/accounts', (reg, res) => {
-  res.status(STATUS_CODES.OK).json({ success: 'true' });
+  res
+    .status(STATUS_CODES.OK)
+    .json({ success: 'true', backEndApiRelay: 'true' });
 });
 
 app.post('/accounts', (req, res) => {
-  res.status(STATUS_CODES.OK).json({ success: 'true' });
+  res
+    .status(STATUS_CODES.OK)
+    .json({ success: 'true', backEndApiRelay: 'true' });
 });
 
 app.post('/deals', (req, res) => {
-  res.status(STATUS_CODES.OK).json({ success: 'true' });
+  res
+    .status(STATUS_CODES.OK)
+    .json({ success: 'true', backEndApiRelay: 'true' });
 });
+
+import * as ipc from './ipc.js';
+
+const L = console.log;
+
+const ipcEventListener = ipc.getEvents();
+
+ipcEventListener.on('connected', function (m) {
+  L('Client has connected');
+});
+
+ipcEventListener.on('data', function (m) {
+  L(m.type);
+  L(m.data.toString());
+});
+
+ipcEventListener.on('error', function (data) {
+  L(data.toString());
+});
+
+ipcEventListener.on('close', function (data) {
+  L(data.toString());
+});
+
+ipc.connect('zohoCrm', true);
 
 app.listen(PORT);
