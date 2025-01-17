@@ -6,3 +6,6 @@ api/**
 !api/**/*.go
 
 *.api.config.json
+
+resources/
+sdk_tokens.txt
