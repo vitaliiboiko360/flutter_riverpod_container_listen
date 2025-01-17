@@ -32,7 +32,7 @@ watch([outputResponse, refOutputResponse], () => {
     <div>
       <form
         :ref="(el) => (refFormAccount = el)"
-        @submit.prevent="() => submit(refFormAccount, 'account')"
+        @submit.prevent="() => submit(refFormAccount, 'accounts')"
       >
         <h3 :class="$style.formTitleH3">Account Form</h3>
         <p
@@ -59,7 +59,7 @@ watch([outputResponse, refOutputResponse], () => {
       </form>
       <form
         :ref="(el) => (refFormDeal = el)"
-        @submit.prevent="() => submit(refFormDeal, 'deal')"
+        @submit.prevent="() => submit(refFormDeal, 'deals')"
       >
         <h3 :class="$style.formTitleH3">Deal Form</h3>
         <p
