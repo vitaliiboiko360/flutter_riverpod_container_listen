@@ -1,16 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	ipc "github.com/james-barrow/golang-ipc"
 )
 
+const Connected = "3"
 const IPC_SOCKET_NAME = "zohoCrm"
 
 func startIpcClient() {
 
-	c, err := ipc.StartClient(IPC_SOCKET_NAME, nil)
+	cli, err := ipc.StartClient(IPC_SOCKET_NAME, nil)
 	if err != nil {
 		log.Println(err)
 		return
@@ -18,23 +20,23 @@ func startIpcClient() {
 
 	for {
 
-		message, err := c.Read()
+		message, err := cli.Read()
 
 		if err == nil {
 
 			if message.MsgType == -1 {
 
-				log.Println("client status", c.Status())
+				log.Println("client status", cli.Status())
 
 				if message.Status == "Reconnecting" {
-					c.Close()
+					cli.Close()
 					return
 				}
 
 			} else {
 
-				log.Println("Client received: "+string(message.Data)+" - Message type: ", message.MsgType)
-				c.Write(5, []byte("GOLANG: Message from GO"))
+				fmt.Printf("Client received: "+string(message.Data)+" - Message type: ", message.MsgType)
+				cli.Write(5, []byte("GOLANG: Message from GO"))
 
 			}
 
@@ -44,11 +46,11 @@ func startIpcClient() {
 		}
 	}
 
-	defer c.Close()
+	defer cli.Close()
 
 }
 
-func startIpcServer() {
+func startIpcServer(c <-chan string) {
 	s, err := ipc.StartServer(IPC_SOCKET_NAME, nil)
 	if err != nil {
 		log.Println("server error", err)
@@ -57,10 +59,17 @@ func startIpcServer() {
 
 	log.Println("server status", s.Status())
 
+	go func(s *ipc.Server) {
+		for {
+			messageToSend := <-c
+			fmt.Println("About to send: %s", messageToSend)
+			s.Write(1, []byte(messageToSend))
+		}
+	}(s)
+
 	for {
 
 		message, err := s.Read()
-
 		if err == nil {
 
 			if message.MsgType == -1 {
@@ -69,13 +78,11 @@ func startIpcServer() {
 
 					log.Println("server status", s.Status())
 
-					s.Write(1, []byte("GO SERVER - STARTED"))
-
 				}
 
 			} else {
 
-				log.Println("GO SRV received: "+string(message.Data)+" - Message type: ", message.MsgType)
+				fmt.Printf("GO SRV received: "+string(message.Data)+" - Message type: %s \n", message.MsgType)
 
 			}
 
