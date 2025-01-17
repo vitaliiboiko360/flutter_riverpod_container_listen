@@ -34,7 +34,7 @@ func main() {
 			Phone:   accountPhone,
 		}
 		requestJson, error := json.Marshal(requestData)
-		fmt.Println("requestJson == %s", string(requestJson[:]))
+		// fmt.Println("requestJson == %s", string(requestJson[:]))
 		if error == nil {
 			channel <- string(requestJson[:])
 		}

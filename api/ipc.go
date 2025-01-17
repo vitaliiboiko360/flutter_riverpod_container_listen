@@ -62,7 +62,7 @@ func startIpcServer(c <-chan string) {
 	go func(s *ipc.Server) {
 		for {
 			messageToSend := <-c
-			fmt.Println("About to send: %s", messageToSend)
+			// fmt.Println("About to send: %s", messageToSend)
 			s.Write(1, []byte(messageToSend))
 		}
 	}(s)
