@@ -62,4 +62,9 @@ ipcEventListener.on('close', function (data) {
 
 ipc.connect('zohoCrm', true);
 
+let counter = 0;
+// setInterval(() => {
+//   ipc.write(1, `# ${counter++} FROM NODEJS AFTER 10sec`);
+// }, 10000);
+
 app.listen(PORT);
