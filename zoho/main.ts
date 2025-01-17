@@ -1,22 +1,19 @@
 import * as os from 'os';
 import { readFileSync } from 'fs';
-import { CreateRecords } from './CreateRecords';
+import { ApiClient } from './ApiClient';
 import { StatusCodes } from 'http-status-codes';
 
 const CONFIG_FILE = './zoho.api.config.json';
 const PORT = 3004;
+const L = console.log;
 
 let config = JSON.parse(readFileSync(CONFIG_FILE, 'utf8'));
 
-// await CreateRecords.initialize(
+// await ApiClient.initialize(
 //   config.clientId,
 //   config.clientSecret,
 //   config.refreshToken
 // );
-
-const leadsModuleAPIName = 'leads';
-// await CreateRecords.createRecords(leadsModuleAPIName);
-const L = console.log;
 
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
@@ -45,22 +42,24 @@ app.get('/accounts', (reg, res) => {
 });
 
 app.post('/accounts', (req, res) => {
-  L('accounts');
-  L(req.body);
-
   res.status(StatusCodes.OK).json({
     success: 'true',
-    website: `${req.body.website}`,
-    formFields: {
-      name: req.body.name,
-      phone: req.body.phone,
+    inputFormFields: {
+      accountWebsite: req.body.accountWebsite,
+      accountName: req.body.accountName,
+      accountPhone: req.body.accountPhone,
     },
   });
 });
 
 app.post('/deals', (req, res) => {
-  L(req.body);
-  res.status(StatusCodes.OK).json({ success: 'true', backEndApiRelay: 'true' });
+  res.status(StatusCodes.OK).json({
+    success: 'true',
+    inputFormFields: {
+      dealName: req.body.dealName,
+      dealStage: req.body.dealStage,
+    },
+  });
 });
 
 app.listen(PORT, '0.0.0.0');
