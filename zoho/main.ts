@@ -9,11 +9,11 @@ const L = console.log;
 
 let config = JSON.parse(readFileSync(CONFIG_FILE, 'utf8'));
 
-// await ApiClient.initialize(
-//   config.clientId,
-//   config.clientSecret,
-//   config.refreshToken
-// );
+await ApiClient.initialize(
+  config.clientId,
+  config.clientSecret,
+  config.accessToken
+);
 
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
@@ -42,6 +42,8 @@ app.get('/accounts', (reg, res) => {
 });
 
 app.post('/accounts', (req, res) => {
+  const { accountName, accountWebsite, accountPhone } = req.body;
+  ApiClient.postAccounts(accountName, accountWebsite, accountPhone);
   res.status(StatusCodes.OK).json({
     success: 'true',
     inputFormFields: {

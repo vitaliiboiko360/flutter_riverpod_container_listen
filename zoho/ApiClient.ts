@@ -1,16 +1,15 @@
 import * as ZOHOCRMSDK from '@zohocrm/nodejs-sdk-7.0';
-import { param } from 'express/lib/request';
 
 const dealsModuleAPIName = 'Deals';
 const accountsModuleAPIName = 'Accounts';
 
 export class ApiClient {
-  static async initialize(clientId, clientSecret, refreshToken) {
+  static async initialize(clientId, clientSecret, accessToken) {
     let environment = ZOHOCRMSDK.USDataCenter.PRODUCTION();
     let token = new ZOHOCRMSDK.OAuthBuilder()
       .clientId(clientId)
       .clientSecret(clientSecret)
-      .refreshToken(refreshToken)
+      .accessToken(accessToken)
       .build();
     (await new ZOHOCRMSDK.InitializeBuilder())
       .environment(environment)
