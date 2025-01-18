@@ -125,7 +125,7 @@ input {
   padding: 0.5rem;
   border: 2px green solid;
   color: darkslategrey;
-  font-size: 1.5rem;
+  font-size: 0.7rem;
   border-radius: 1rem;
 }
 .failure {
@@ -135,6 +135,6 @@ input {
   border: 3px red solid;
   border-radius: 1rem;
   color: darkred;
-  font-size: 1.3rem;
+  font-size: 0.7rem;
 }
 </style>
