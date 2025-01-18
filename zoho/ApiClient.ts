@@ -4,17 +4,22 @@ const dealsModuleAPIName = 'Deals';
 const accountsModuleAPIName = 'Accounts';
 
 export class ApiClient {
-  static async initialize(clientId, clientSecret, accessToken) {
+  static async initialize(clientId, clientSecret, grantToken) {
     let environment = ZOHOCRMSDK.USDataCenter.PRODUCTION();
     let token = new ZOHOCRMSDK.OAuthBuilder()
       .clientId(clientId)
       .clientSecret(clientSecret)
-      .accessToken(accessToken)
+      .grantToken(grantToken)
       .build();
     (await new ZOHOCRMSDK.InitializeBuilder())
       .environment(environment)
       .token(token)
       .initialize();
+
+    const logger = new ZOHOCRMSDK.Logger(
+      ZOHOCRMSDK.Levels.INFO,
+      '/zoho_log.log'
+    );
   }
 
   static async getRecords(moduleAPIName) {
@@ -99,6 +104,8 @@ export class ApiClient {
           });
         }
       }
+
+      return responseObject;
     }
   }
 
@@ -155,6 +162,7 @@ export class ApiClient {
           });
         }
       }
+      return responseObject;
     }
   }
 }

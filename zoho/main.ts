@@ -12,7 +12,7 @@ let config = JSON.parse(readFileSync(CONFIG_FILE, 'utf8'));
 await ApiClient.initialize(
   config.clientId,
   config.clientSecret,
-  config.accessToken
+  config.grantToken
 );
 
 import { createRequire } from 'module';
@@ -43,7 +43,11 @@ app.get('/accounts', (reg, res) => {
 
 app.post('/accounts', (req, res) => {
   const { accountName, accountWebsite, accountPhone } = req.body;
-  ApiClient.postAccounts(accountName, accountWebsite, accountPhone);
+  const responseObject = ApiClient.postAccounts(
+    accountName,
+    accountWebsite,
+    accountPhone
+  );
   res.status(StatusCodes.OK).json({
     success: 'true',
     inputFormFields: {
@@ -51,16 +55,21 @@ app.post('/accounts', (req, res) => {
       accountName: req.body.accountName,
       accountPhone: req.body.accountPhone,
     },
+    response: responseObject,
   });
 });
 
 app.post('/deals', (req, res) => {
+  const dealName = req.body.dealName;
+  const dealStage = req.body.dealStage;
+  const responseObject = ApiClient.postDeals(dealName, dealStage);
   res.status(StatusCodes.OK).json({
     success: 'true',
     inputFormFields: {
-      dealName: req.body.dealName,
-      dealStage: req.body.dealStage,
+      dealName: dealName,
+      dealStage: dealStage,
     },
+    response: responseObject,
   });
 });
 
