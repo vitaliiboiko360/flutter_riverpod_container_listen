@@ -1,0 +1,11 @@
+node_modules
+package-lock.json
+js/bundle.js*
+
+api/**
+!api/**/*.go
+
+*.api.config.json
+
+resources/
+sdk_tokens.txt
